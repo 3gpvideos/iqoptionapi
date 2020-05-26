@@ -398,7 +398,13 @@ class IQ_Option:
                     return "REAL"
                 elif balance["type"] == 4:
                     return "PRACTICE"
-
+                
+    def get_all_balance(self):
+        # self.api.profile.balance_type=None
+        profile = self.get_profile_ansyc()
+        return profile["balances"]
+    
+                
     def reset_practice_balance(self):
         self.api.training_balance_reset_request = None
         self.api.reset_training_balance()
