@@ -398,6 +398,8 @@ class IQ_Option:
                     return "REAL"
                 elif balance["type"] == 4:
                     return "PRACTICE"
+                else 
+                    return balance['tournament_name']
                 
     def get_all_balance(self):
         # self.api.profile.balance_type=None
@@ -422,7 +424,42 @@ class IQ_Option:
         instrument_type = ["cfd", "forex", "crypto", "digital-option", "turbo-option", "binary-option"]
         for ins in instrument_type:
             self.api.portfolio(Main_Name=Main_Name, name="portfolio.order-changed", instrument_type=ins)
+            
+    def set_tournament(self, Balance_MODE):
+        def set_id(b_id):
+            if global_value.balance_id != None:
+                self.position_change_all("unsubscribeMessage", global_value.balance_id)
 
+            global_value.balance_id = b_id
+
+            self.position_change_all("subscribeMessage", b_id)
+
+        real_id = None
+        practice_id = None
+        tournament_id = None
+
+        for balance in self.get_profile_ansyc()["balances"]:
+            if balance["type"] == 1:
+                real_id = balance["id"]
+            if balance["type"] == 4:
+                practice_id = balance["id"]
+            if balance["tournament_name"] == Balance_MODE:
+                tournament_id = balance["id"]
+
+        if Balance_MODE == "REAL":
+            set_id(real_id)
+
+        elif Balance_MODE == "PRACTICE":
+            set_id(practice_id)
+
+        else:
+            if tournament_id != None:
+                set_id(practice_id)
+            else:
+                logging.error("ERROR doesn't have this mode")
+                exit(1)    
+            
+            
     def change_balance(self, Balance_MODE):
         def set_id(b_id):
             if global_value.balance_id != None:
@@ -451,6 +488,7 @@ class IQ_Option:
         else:
             logging.error("ERROR doesn't have this mode")
             exit(1)
+        
 
     # ________________________________________________________________________
     # _______________________        CANDLE      _____________________________
