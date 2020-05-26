@@ -398,8 +398,8 @@ class IQ_Option:
                     return "REAL"
                 elif balance["type"] == 4:
                     return "PRACTICE"
-                else 
-                    return balance['tournament_name']
+                elif balance["type"] == 2: 
+                    return "TOURNAMENT"
                 
     def get_all_balance(self):
         # self.api.profile.balance_type=None
@@ -454,7 +454,7 @@ class IQ_Option:
 
         else:
             if tournament_id != None:
-                set_id(practice_id)
+                set_id(tournament_id)
             else:
                 logging.error("ERROR doesn't have this mode")
                 exit(1)    
